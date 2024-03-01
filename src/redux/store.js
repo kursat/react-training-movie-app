@@ -1,8 +1,8 @@
 import { combineSlices, configureStore } from '@reduxjs/toolkit';
 import { counterSlice } from './features/counterSlice';
-import { userSlice } from './features/userSlice';
+import { usersApi } from './api/usersApi';
 
-const rootReducer = combineSlices(counterSlice, userSlice);
+const rootReducer = combineSlices(counterSlice);
 
 // const rootReducer2 = combineReducers({
 //     counter: counterSlice.reducer,
@@ -10,5 +10,10 @@ const rootReducer = combineSlices(counterSlice, userSlice);
 // });
 
 export const store = configureStore({
-    reducer: rootReducer,
+    reducer: {
+        [counterSlice.reducerPath]: counterSlice.reducer,
+        [usersApi.reducerPath]: usersApi.reducer,
+    },
+    middleware: (getDefaultMiddleware) =>
+        getDefaultMiddleware().concat(usersApi.middleware),
 });
